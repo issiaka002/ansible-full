@@ -1,0 +1,118 @@
+https://github.com/ansible-semaphore/semaphore
+
+#cloud-config
+apt_upgrade: true
+apt_sources:
+# PPA shortcut:
+#  * Setup correct apt sources.list line
+#  * Import the signing key from LP
+#
+#  See https://help.launchpad.net/Packaging/PPA for more information
+#  this requires ‘add-apt-repository’
+– source: « ppa:ansible/ansible »    # Quote the string
+packages:
+ – software-properties-common
+ – ansible
+ – git
+write_files:
+ – path: /etc/ansible-pull/cron.sh
+   owner: root:root
+   permissions: ‘0744’
+   content: |
+       ansible-pull provision.yml –url ${git_repository} –checkout step1 –accept-host-key -i localhost -e node_type=${node_type} -e env=${env}
+runcmd:
+ # do not create this file in write_files part since /etc/cron.d does not yet exists
+ – [ sh, -c, « echo ‘*/30 * * * * root /etc/ansible-pull/cron.sh > /var/log/ansible-pull.log 2>&1’ > /etc/cron.d/ansible_pull_cronjob »]
+
+https://stackoverflow.com/questions/44077630/ansible-to-check-diskspace-for-mounts-mentioned-as-variable
+
+
+https://github.com/ansible/tower-example
+
+groups['all'] | regex_replace('^ans.*([0-9]+)$', '\\1') | int is divisibleby 2 
+
+auditing
+https://blog.newrelic.com/engineering/ansible-auditing-tool/
+
+add_host : docker factory,/buildah
+https://blog.tomecek.net/post/building-containers-with-buildah-and-ansible/
+
+
+https://www.adaltas.com/fr/2017/10/25/de-dockerfile-a-ansible-containers/
+
+
+https://github.com/ansible/ansible-baseline
+
+- status : changed / failed / success
+
+- cli_config module
+
+
+- mitogen
+
+- démo cache
+
+- awx
+
+
+- any_errors_fatal
+
+- max fail percentage
+
+- no_logs
+
+- tags
+
+
+- strategy: debug
+P task/host/result/vars ->Prints the value to executed a module
+task.args[key] = value — upgrade the module arguments
+vars[args]=value — set argument value
+r(edo) — run the task again
+c(continue) — Just continue
+q(uit) — quit from debugger
+
+- ansible-lint https://medium.com/faun/linting-your-ansible-playbooks-and-make-a-continuous-integration-ci-solution-bcf8b4ea4c03
+
+- vagrant ansible
+
+
+
+	
+- import_tasks: x.yml 
+  with_items: [1,2,3] 
+ 
+This willi import x.yml one time and every imported task will now run 
+and loop over 1,2,3 
+ 
+- include_tasks: x.yml 
+  with_items: [1,2,3] 
+ 
+This will include x.yml 3 times and set the 'item' variable to 1, 2 
+and 3 respectively 
+
+
+
+
+
+
+- with_file
+
+
+https://github.com/octplane/ansible_stdout_compact_logger
+
+
+
+
+
+<br>
+- until
+
+```
+- shell: /usr/bin/foo
+  register: result
+  until: result.stdout.find("all systems go") != -1
+  retries: 5
+  delay: 10
+```
+
